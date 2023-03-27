@@ -15,6 +15,12 @@
         </x-slot>
     @endif
 
+    @if(isset($customMainScripts))
+        <x-slot name="customMainScripts">
+            {{ $customMainScripts }}
+        </x-slot>
+    @endif
+
     <!-- Page Content -->
     <main class="container my-5">
         {{ $slot }}

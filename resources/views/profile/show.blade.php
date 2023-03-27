@@ -18,14 +18,17 @@
             <div class="col-sm-10">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
-                        <h1 class="me-3">{{$user->username}}</h1>
-                        <button class="btn btn-primary" style="height: fit-content;" onclick="followUser(this)">
+                        <h1 class="me-3" >{{$user->username}}</h1>
+                        <div id="follow-div" {{$authUser?->following->contains('id', $user->id)? "data-this-user-followed": "" }} data-follow-link="{{ route('follow.store', $user->id) }}">
+
+                        </div>
+                        <!-- <button class="btn btn-primary" style="height: fit-content;" onclick="followUser(this)">
                             @if($user->followers->contains('id', $user->id))
                                 Unfollow
                             @else
                                 Follow
                             @endif
-                        </button>
+                        </button> -->
                     </div>
                     @can('update', $user->profile)
                         <a href="{{ route('profile.edit') }}" style="text-decoration: none;">Edit Profile</a>
@@ -54,15 +57,18 @@
             </div>
         @endforeach
     </article>
-    <script>
+    <x-slot name="customMainScripts">
+        @vite(['resources/sass/app.scss', 'resources/js/follow.js'])
+    </x-slot>
+    <!-- <script>
         function followUser(el){
             axios.post("{{ route('follow.store', $user->id) }}").then(function(result){
                 
                 if(result.data.attached.length == 0)el.innerText = 'Follow';
                 else el.innerText = 'Unfollow';
             }).catch(function(error){
-                if(error.response.status == '401') window.location = '/login';php 
+                if(error.response.status == '401') window.location = '/login'; 
             });
         }
-    </script>
+    </script> -->
 </x-app-layout>

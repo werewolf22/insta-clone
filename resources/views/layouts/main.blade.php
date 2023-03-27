@@ -25,7 +25,7 @@
             window.__vite_plugin_react_preamble_installed__ = true
         </script>
         @if(isset($customMainScripts))
-            @vite($customMainScripts)
+            {{ $customMainScripts }}
         @else
             @vite(['resources/sass/app.scss', 'resources/js/app.js'])
         @endif

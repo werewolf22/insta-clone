@@ -22,7 +22,7 @@ class ProfileController extends Controller
         return view('profile.show', [
             'user' => $request->user()->load(['profile', 'posts' => function ($query) {
                 $query->latest();
-            }]),
+            }]), "authUser" => $request->user()->load("following")
         ]);
     }
 
@@ -33,11 +33,13 @@ class ProfileController extends Controller
      * @return \Illuminate\View\View
      */
     public function show($userId)
-    {
+    {   
+        /** @var  App\Models\User $authUser */ 
+        $authUser = auth()->user();
         return view('profile.show', [
             'user' => User::with(['profile', 'posts' => function ($query) {
                 $query->latest();
-            }])->findOrFail($userId),
+            }])->findOrFail($userId), "authUser" => $authUser?->load("following")
         ]);
     }
 
