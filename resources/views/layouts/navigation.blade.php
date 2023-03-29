@@ -22,28 +22,41 @@
 
                 <!-- Settings Dropdown -->
                 @auth
-                    <x-dropdown id="settingsDropdown">
-                        <x-slot name="trigger">
-                            {{ Auth::user()->name }}
-                        </x-slot>
+                    @if(Request::segment(1)=='')
+                        <x-nav-link href="{{ url('/dashboard') }}" class="text-muted">Dashboard</x-nav-link>
+                    @else
+                        <x-dropdown id="settingsDropdown">
+                            <x-slot name="trigger">
+                                {{ Auth::user()->name }}
+                            </x-slot>
 
-                        <x-slot name="content">
-                            <!-- Authentication -->
-                            <x-dropdown-link :href="route('profile.showUser')">
-                                    {{ __('Profile') }}
-                            </x-dropdown-link>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <x-dropdown-link :href="route('logout')"
-                                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                            <x-slot name="content">
+                                <!-- Authentication -->
+                                <x-dropdown-link :href="route('profile.showUser')">
+                                        {{ __('Profile') }}
                                 </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                @endauth
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+
+                                    <x-dropdown-link :href="route('logout')"
+                                                    onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                        {{ __('Log Out') }}
+                                    </x-dropdown-link>
+                                </form>
+                            </x-slot>
+                        </x-dropdown>
+                    @endif
+                @else
+                    @if (Route::has('login'))
+                            
+                        <x-nav-link href="{{ route('login') }}" class="text-muted">Log in</x-nav-link>
+
+                        @if (Route::has('register'))
+                            <x-nav-link href="{{ route('register') }}" class="ms-4 text-muted">Register</x-nav-link>
+                        @endif
+                    @endif
+                @endif
             </ul>
         </div>
     </div>

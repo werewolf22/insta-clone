@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ PostController::class,'index'])->name('home');
 Route::get('/bootstrap-practise', function(){
     return view('bootstrap-index');
 });

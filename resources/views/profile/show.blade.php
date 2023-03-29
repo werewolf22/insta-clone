@@ -58,7 +58,7 @@
         @endforeach
     </article>
     <x-slot name="customMainScripts">
-        @vite(['resources/sass/app.scss', 'resources/js/follow.js'])
+        @vite(['resources/js/follow.js'])
     </x-slot>
     <!-- <script>
         function followUser(el){

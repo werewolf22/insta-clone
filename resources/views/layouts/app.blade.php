@@ -9,6 +9,20 @@
         </div>
     </header> -->
     @endif
+    
+
+    @if(isset($customMainCss))
+        <x-slot name="customMainCss">
+            {{ $customMainCss }}
+        </x-slot>
+    @endif
+
+    <!-- Page Content -->
+    <main class="container my-5">
+        {{ $slot }}
+    </main>
+
+
     @if(isset($additionalScripts))
         <x-slot name="additionalScripts">
             {{ $additionalScripts }}
@@ -20,9 +34,4 @@
             {{ $customMainScripts }}
         </x-slot>
     @endif
-
-    <!-- Page Content -->
-    <main class="container my-5">
-        {{ $slot }}
-    </main>
 </x-main-layout>

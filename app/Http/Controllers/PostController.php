@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class PostController extends Controller
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return view('welcome',['posts'=> Post::join('follow_user'/* shortcut can also be used here follow_user as fa */, 'posts.user_id', '=', 'follow_user.follow_id')->where('follow_user.user_id', auth()->id())->select('posts.*')->latest('posts.created_at')->with('user.profile')->paginate(1)]);
     }
 
     /**

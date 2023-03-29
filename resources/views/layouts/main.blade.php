@@ -16,6 +16,20 @@
         <!-- Styles -->
         <!-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> -->
 
+        
+        @if(isset($customMainCss))
+            {{ $customMainCss }}
+        @else
+            @vite(['resources/sass/app.scss'])
+        @endif
+    </head>
+    <body class="font-sans antialiased bg-light">
+        {{ $slot }}
+
+        @if(isset($additionalScripts))
+            {{ $additionalScripts }}
+        @endif
+
         <!-- Scripts -->
         <script type="module">
             import RefreshRuntime from "http://localhost:5173/@react-refresh"
@@ -24,16 +38,11 @@
             window.$RefreshSig$ = () => (type) => type
             window.__vite_plugin_react_preamble_installed__ = true
         </script>
+
         @if(isset($customMainScripts))
             {{ $customMainScripts }}
         @else
-            @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+            @vite(['resources/js/app.js'])
         @endif
-        @if(isset($additionalScripts))
-            {{ $additionalScripts }}
-        @endif
-    </head>
-    <body class="font-sans antialiased bg-light">
-        {{ $slot }}
     </body>
 </html>
