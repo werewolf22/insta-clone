@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
@@ -19,11 +20,12 @@ class ProfileController extends Controller
      */
     public function showUserProfile(Request $request)
     {
-        return view('profile.show', [
-            'user' => $request->user()->load(['profile', 'posts' => function ($query) {
-                $query->latest();
-            }]), "authUser" => $request->user()->load("following")
-        ]);
+        $user = $request->user()->load(['profile', 'posts' => function ($query) {
+            $query->latest();
+        }]);
+        $authUser = $request->user()->load("following");
+        [$postsCount, $followingCount, $followersCount] = $this->getUserStat($user);
+        return view('profile.show', compact('user', 'authUser', 'postsCount', 'followingCount', 'followersCount'));
     }
 
     /**
@@ -34,15 +36,29 @@ class ProfileController extends Controller
      */
     public function show($userId)
     {   
+        $user = User::with(['profile', 'posts' => function ($query) {
+            $query->latest();
+        }])->findOrFail($userId);
         /** @var  App\Models\User $authUser */ 
         $authUser = auth()->user();
-        return view('profile.show', [
-            'user' => User::with(['profile', 'posts' => function ($query) {
-                $query->latest();
-            }])->findOrFail($userId), "authUser" => $authUser?->load("following")
-        ]);
+        $authUser?->load("following");
+        [$postsCount, $followingCount, $followersCount] = $this->getUserStat($user);
+        return view('profile.show', compact('user', 'authUser', 'postsCount', 'followingCount', 'followersCount'));
     }
 
+
+    protected function getUserStat($user){
+        $postsCount = Cache::remember('posts.count.'.$user->id, now()->addSeconds(30), function() use ($user){
+            return $user->posts->count();
+        });
+        $followingCount = Cache::remember('following.count.'.$user->id, now()->addSeconds(30), function() use ($user){
+            return $user->following->count();
+        });
+        $followersCount = Cache::remember('followers.count.'.$user->id, now()->addSeconds(30), function() use ($user){
+            return $user->followers->count();
+        });
+        return [$postsCount, $followingCount, $followersCount];
+    }
 
     /**
      * Display the user's profile form.

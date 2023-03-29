@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 @endforelse
-                {{ $posts->links()  }}
+                {{ $posts->links() }}
             @else
                 <div class="p-4 p-sm-5 bg-white shadow rounded-3">
                     <div class="max-w-xl">
