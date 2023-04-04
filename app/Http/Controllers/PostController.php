@@ -26,7 +26,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        return view('posts.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class PostController extends Controller
     {
         // dd($post);
         $post->load('user.profile');
-        return view('post.show',['post'=>$post]);
+        return view('posts.show',['post'=>$post]);
     }
 
     /**

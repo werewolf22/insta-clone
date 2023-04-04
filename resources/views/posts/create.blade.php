@@ -28,7 +28,8 @@
                                     <x-input-label for="image" :value="__('Profile Picture')" />
                                 </div>
                                 <div class="col-auto {{$errors->get('image')? 'is-invalid':''}}">
-                                    <x-text-input id="image" name="image" type="file" :error="$errors->get('image')" class=" mt-1" />
+                                    <!-- when selecting image file only the image files are seletable -->
+                                    <x-text-input id="image" name="image" type="file" :error="$errors->get('image')" class=" mt-1" accept="image/*"/>
                                 </div>
                                 <x-input-error for="image" class="mt-2" :message="$errors->get('image')" />
                             </div>
